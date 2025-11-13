@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Domain\ValueObjects\AvailabilityOption;
+use App\Infrastructure\Eloquent\Models\EloquentDatasetType;
+use App\Infrastructure\Eloquent\Models\EloquentTechnologyType;
 use App\Infrastructure\Repositories\EloquentSectorRepository;
 use App\Services\ModelHighlightService;
 use Illuminate\View\View;
@@ -41,8 +44,8 @@ class HomeController extends Controller
             ],
         ];
 
-        $technologyTypes = \App\Infrastructure\Eloquent\Models\EloquentTechnologyType::query()->orderBy('name')->get();
-        $datasetTypes = \App\Infrastructure\Eloquent\Models\EloquentDatasetType::query()->orderBy('name')->get();
+        $technologyTypes = EloquentTechnologyType::query()->orderBy('name')->get();
+        $datasetTypes = EloquentDatasetType::query()->orderBy('name')->get();
 
         $prospective = [
             ['label' => 'Inteligencia Artificial', 'value' => 'ia', 'icon' => '🤖'],
@@ -68,7 +71,7 @@ class HomeController extends Controller
                 'sectors' => $customSectors,
                 'prospective' => $prospective,
                 'technologyTypes' => $technologyTypes,
-                'availability' => \App\Domain\ValueObjects\AvailabilityOption::cases(),
+                'availability' => AvailabilityOption::cases(),
                 'datasets' => $datasetTypes,
             ],
         ]);

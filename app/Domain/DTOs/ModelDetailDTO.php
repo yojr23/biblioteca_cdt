@@ -6,6 +6,7 @@ namespace App\Domain\DTOs;
 
 use App\Domain\DTOs\ResourceEmbedDTO;
 use App\Domain\ValueObjects\AvailabilityOption;
+use App\Domain\ValueObjects\ColorCode;
 use App\Domain\ValueObjects\Slug;
 use App\Domain\ValueObjects\TRLLevel;
 
@@ -23,7 +24,8 @@ final class ModelDetailDTO
         public readonly string $title,
         public readonly Slug $slug,
         public readonly string $sectorName,
-        public readonly string $sectorColor,
+        public readonly ColorCode $sectorColor,
+        public readonly string $sectorSlug,
         public readonly string $shortDescription,
         public readonly ?string $longDescriptionPublic,
         public readonly ?string $longDescriptionPrivate,

@@ -60,6 +60,18 @@
                     </div>
                 </div>
 
+                <div>
+                    <label class="text-xs uppercase text-slate-400">Prospectiva</label>
+                    <div class="mt-2 flex flex-wrap gap-2">
+                        @foreach($prospectiveOptions as $option)
+                            <label class="inline-flex items-center gap-1 text-xs">
+                                <input type="checkbox" name="prospective[]" value="{{ $option['value'] }}" class="rounded border-white/20 bg-slate-950" @checked(in_array($option['value'], $filters->prospectiveModes, true))>
+                                {{ $option['label'] }}
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="text-xs uppercase text-slate-400">TRL Min</label>

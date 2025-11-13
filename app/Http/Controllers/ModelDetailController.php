@@ -7,7 +7,8 @@ namespace App\Http\Controllers;
 use App\Events\ModelViewedEvent;
 use App\Infrastructure\Eloquent\Models\EloquentModel;
 use App\Services\AuthorizationService;
-use App\Services\ResourceEmbedService;
+use App\Services\GamificationService;
+use App\Services\ModelDetailService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -15,7 +16,8 @@ class ModelDetailController extends Controller
 {
     public function __construct(
         private readonly AuthorizationService $authorizationService,
-        private readonly ResourceEmbedService $resourceEmbedService,
+        private readonly ModelDetailService $modelDetailService,
+        private readonly GamificationService $gamificationService,
     ) {}
 
     public function show(Request $request, string $slug): View
@@ -45,14 +47,17 @@ class ModelDetailController extends Controller
             ],
         ));
 
-        $resourceEmbeds = $model->resources
-            ->map(fn ($resource) => $this->resourceEmbedService->build($resource, $request->user()))
-            ->all();
+        if ($request->user()) {
+            $this->gamificationService->recordSectorExploration($request->user(), $model->sector?->slug ?? 'sin-sector');
+        }
+
+        $detailDto = $this->modelDetailService->toDto($model, $request->user());
+        $badges = $request->user() ? $this->gamificationService->badgesFor($request->user()) : [];
 
         return view('catalog.show', [
-            'model' => $model,
-            'resourceEmbeds' => $resourceEmbeds,
+            'model' => $detailDto,
             'canViewRestricted' => $this->authorizationService->canViewRestrictedResources($request->user()),
+            'badges' => $badges,
         ]);
     }
 }

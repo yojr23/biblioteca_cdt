@@ -14,6 +14,7 @@ use App\Services\ResourceEmbedService;
 use App\Services\Strategies\AvailabilityFilterStrategy;
 use App\Services\Strategies\DatasetTypeFilterStrategy;
 use App\Services\Strategies\FullTextSearchStrategy;
+use App\Services\Strategies\ProspectiveFilterStrategy;
 use App\Services\Strategies\SectorFilterStrategy;
 use App\Services\Strategies\TagFilterStrategy;
 use App\Services\Strategies\TechnologyTypeFilterStrategy;
@@ -38,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
                 $app->make(DatasetTypeFilterStrategy::class),
                 $app->make(AvailabilityFilterStrategy::class),
                 $app->make(TRLFilterStrategy::class),
+                $app->make(ProspectiveFilterStrategy::class),
                 $app->make(TagFilterStrategy::class),
                 $app->make(FullTextSearchStrategy::class),
             ]);

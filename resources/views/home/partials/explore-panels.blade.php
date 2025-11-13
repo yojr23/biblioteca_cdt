@@ -80,7 +80,7 @@
                     
                     <div class="flex flex-wrap gap-3">
                         @foreach($panelFilters['prospective'] as $filter)
-                            <a href="{{ route('catalog.index', ['search' => $filter['value']]) }}" 
+                            <a href="{{ route('catalog.index', ['prospective[]' => $filter['value']]) }}" 
                                class="group/item inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-600 border border-purple-200 hover:border-transparent text-slate-700 hover:text-white font-semibold text-sm rounded-xl shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300">
                                 <span class="text-lg">{{ $filter['icon'] }}</span>
                                 <span>{{ $filter['label'] }}</span>

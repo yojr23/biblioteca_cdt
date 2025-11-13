@@ -13,6 +13,7 @@ final class FilterStateDTO
      * @param int[] $datasetTypeIds
      * @param int[] $tagIds
      * @param AvailabilityOption[] $availabilityOptions
+     * @param string[] $prospectiveModes
      */
     public function __construct(
         public readonly ?int $sectorId = null,
@@ -20,6 +21,7 @@ final class FilterStateDTO
         public readonly array $datasetTypeIds = [],
         public readonly array $tagIds = [],
         public readonly array $availabilityOptions = [],
+        public readonly array $prospectiveModes = [],
         public readonly ?int $trlMin = null,
         public readonly ?int $trlMax = null,
         public readonly ?string $search = null,

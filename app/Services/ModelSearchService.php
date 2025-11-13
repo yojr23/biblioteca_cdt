@@ -31,6 +31,7 @@ class ModelSearchService
             datasetTypeIds: $this->toIntArray(Arr::wrap($payload['dataset_types'] ?? [])),
             tagIds: $this->toIntArray(Arr::wrap($payload['tags'] ?? [])),
             availabilityOptions: $this->mapAvailability(Arr::wrap($payload['availability'] ?? [])),
+            prospectiveModes: $this->toStringArray(Arr::wrap($payload['prospective'] ?? [])),
             trlMin: $this->toNullableInt($payload['trl_min'] ?? null),
             trlMax: $this->toNullableInt($payload['trl_max'] ?? null),
             search: $payload['search'] ?? null,
@@ -125,5 +126,19 @@ class ModelSearchService
         }
 
         return 'desc';
+    }
+
+    /**
+     * @param array<int|string|null> $values
+     * @return string[]
+     */
+    private function toStringArray(array $values): array
+    {
+        return collect($values)
+            ->filter(fn ($value) => filled($value))
+            ->map(fn ($value) => (string) $value)
+            ->unique()
+            ->values()
+            ->all();
     }
 }

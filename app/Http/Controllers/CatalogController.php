@@ -25,6 +25,10 @@ class CatalogController extends Controller
         $filterState = $this->modelSearchService->buildFilterState($request->all());
         $paginator = $this->modelSearchService->search($filterState);
         $cards = $this->modelSearchService->cardsFromResult($paginator);
+        $prospectiveOptions = [
+            ['label' => 'IA', 'value' => 'ia'],
+            ['label' => 'IoT', 'value' => 'iot'],
+        ];
 
         return view('catalog.index', [
             'models' => $cards,
@@ -35,6 +39,7 @@ class CatalogController extends Controller
             'datasetTypes' => EloquentDatasetType::query()->orderBy('name')->get(),
             'tags' => EloquentTag::query()->orderBy('name')->get(),
             'availabilityOptions' => AvailabilityOption::cases(),
+            'prospectiveOptions' => $prospectiveOptions,
         ]);
     }
 }
