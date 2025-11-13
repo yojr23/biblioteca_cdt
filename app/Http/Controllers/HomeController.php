@@ -41,12 +41,36 @@ class HomeController extends Controller
             ],
         ];
 
+        $technologyTypes = \App\Infrastructure\Eloquent\Models\EloquentTechnologyType::query()->orderBy('name')->get();
+        $datasetTypes = \App\Infrastructure\Eloquent\Models\EloquentDatasetType::query()->orderBy('name')->get();
+
+        $prospective = [
+            ['label' => 'Inteligencia Artificial', 'value' => 'ia', 'icon' => '🤖'],
+            ['label' => 'Internet de las Cosas', 'value' => 'iot', 'icon' => '📡'],
+        ];
+
+        $customSectors = [
+            ['label' => 'Agro', 'value' => 'agro'],
+            ['label' => 'Salud', 'value' => 'salud'],
+            ['label' => 'Turismo', 'value' => 'turismo'],
+            ['label' => 'Asistentes Virtuales', 'value' => 'asistentes'],
+            ['label' => 'UNAB', 'value' => 'unab'],
+            ['label' => 'Educación', 'value' => 'educacion'],
+        ];
+
         return view('home.index', [
             'carouselSlides' => $carouselSlides,
             'highlights' => $highlighted,
             'mostViewed' => $this->highlightService->mostViewed(4),
             'sectors' => $this->sectorRepository->allWithModelCounts(),
             'organization' => $organization,
+            'panelFilters' => [
+                'sectors' => $customSectors,
+                'prospective' => $prospective,
+                'technologyTypes' => $technologyTypes,
+                'availability' => \App\Domain\ValueObjects\AvailabilityOption::cases(),
+                'datasets' => $datasetTypes,
+            ],
         ]);
     }
 }
