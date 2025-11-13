@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Domain\ValueObjects\AvailabilityOption;
+use App\Infrastructure\Eloquent\Models\EloquentDatasetType;
+use App\Infrastructure\Eloquent\Models\EloquentTag;
+use App\Infrastructure\Eloquent\Models\EloquentTechnologyType;
 use App\Infrastructure\Repositories\EloquentSectorRepository;
 use App\Services\ModelSearchService;
 use Illuminate\Http\Request;
@@ -27,6 +31,10 @@ class CatalogController extends Controller
             'paginator' => $paginator,
             'filters' => $filterState,
             'sectors' => $this->sectorRepository->all(),
+            'technologyTypes' => EloquentTechnologyType::query()->orderBy('name')->get(),
+            'datasetTypes' => EloquentDatasetType::query()->orderBy('name')->get(),
+            'tags' => EloquentTag::query()->orderBy('name')->get(),
+            'availabilityOptions' => AvailabilityOption::cases(),
         ]);
     }
 }

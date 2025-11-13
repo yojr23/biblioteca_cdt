@@ -20,6 +20,7 @@ class PDFJSEmbedStrategy implements ResourceEmbedStrategyInterface
         $viewerUrl = URL::to('/pdf-viewer?file='.urlencode((string) $resource->url));
 
         return new ResourceEmbedDTO(
+            resourceId: $resource->id,
             type: 'document',
             provider: 'pdfjs',
             url: $viewerUrl,

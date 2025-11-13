@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Events\ModelViewedEvent;
 use App\Infrastructure\Eloquent\Models\EloquentModel;
 use App\Services\AuthorizationService;
 use App\Services\ResourceEmbedService;
@@ -33,6 +34,16 @@ class ModelDetailController extends Controller
         if (! $this->authorizationService->canViewModel($request->user(), $model)) {
             abort(403);
         }
+
+        event(new ModelViewedEvent(
+            model: $model,
+            user: $request->user(),
+            meta: [
+                'session_id' => $request->session()->getId(),
+                'source' => 'catalog-detail',
+                'ip_address' => $request->ip(),
+            ],
+        ));
 
         $resourceEmbeds = $model->resources
             ->map(fn ($resource) => $this->resourceEmbedService->build($resource, $request->user()))

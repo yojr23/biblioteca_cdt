@@ -17,6 +17,7 @@ class InternalDemoEmbedStrategy implements ResourceEmbedStrategyInterface
     public function build(EloquentResource $resource): ResourceEmbedDTO
     {
         return new ResourceEmbedDTO(
+            resourceId: $resource->id,
             type: $resource->type,
             provider: $resource->provider ?? 'internal',
             url: $resource->url ?? $resource->storage_path ?? '#',

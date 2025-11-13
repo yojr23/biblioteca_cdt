@@ -37,7 +37,7 @@
                         <div class="mt-4 h-32 rounded-xl bg-slate-800/60 blur-sm"></div>
                         <p class="mt-2 text-xs text-slate-400">{{ $resource->ctaLabel }}</p>
                     @else
-                        <a href="{{ $resource->url }}" target="_blank" class="mt-4 inline-flex text-sm text-cyan-300">Abrir recurso →</a>
+                        <a href="{{ route('resources.open', ['resource' => $resource->resourceId, 'model' => $model->id]) }}" class="mt-4 inline-flex text-sm text-cyan-300">Abrir recurso →</a>
                     @endif
                 </div>
             @empty

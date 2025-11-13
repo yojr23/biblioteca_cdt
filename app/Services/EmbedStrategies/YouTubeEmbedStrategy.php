@@ -20,6 +20,7 @@ class YouTubeEmbedStrategy implements ResourceEmbedStrategyInterface
         $embedUrl = $videoId ? sprintf('https://www.youtube.com/embed/%s', $videoId) : ($resource->url ?? '');
 
         return new ResourceEmbedDTO(
+            resourceId: $resource->id,
             type: 'video',
             provider: 'youtube',
             url: $embedUrl,
