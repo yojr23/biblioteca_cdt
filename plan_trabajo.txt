@@ -1,0 +1,273 @@
+Plan de Trabajo: Biblioteca CDT - Arquitectura por Capas con SOLID
+Objetivo
+Crear una biblioteca virtual responsive, dinámica y moderna para el CDT Smart Regions Center (UNAB), enfocada en modelos de IA (TRL 4 inicialmente) y kits IoT, con documentación técnica y demos. La arquitectura será limpia, orientada a objetos, respetando SOLID y preparada para escalar.
+
+Stack Tecnológico
+Backend: Laravel (PHP), OOP + SOLID, Repositorios, Servicios, Events/Listeners
+Frontend: Blade + Tailwind CSS + Alpine.js (interactividad ligera, modales, tours, dark mode)
+Auth & Roles: spatie/laravel-permission envuelto en AuthorizationService propio
+DB & Performance: MySQL/PostgreSQL + índices + caching (Redis)
+Arquitectura por Capas
+1. Capa de Presentación (UI / HTTP)
+Controllers: HomeController, CatalogController, ModelDetailController, AuthController
+Blade Views: Layouts, componentes reutilizables con Tailwind CSS
+Alpine.js: Interactividad (filtros, modales, tour, dark mode)
+2. Capa de Aplicación
+Servicios de caso de uso:
+ModelSearchService - Búsqueda y filtrado
+ModelHighlightService - Proyectos destacados
+ResourceEmbedService - Embeds inteligentes
+AnalyticsService / MetricsService - Métricas
+GamificationService - Badges y logros
+AuthorizationService - Fachada sobre Spatie
+3. Capa de Dominio
+Entidades: Model, Sector, Tag, TechnologyType, DatasetType, Resource
+Value Objects: TRLLevel, AvailabilityOption, ColorCode, Slug
+DTOs: ModelCardDTO, ModelDetailDTO, ResourceEmbedDTO, FilterStateDTO
+Interfaces: ModelSearchRepositoryInterface, FilterStrategyInterface
+4. Capa de Infraestructura
+Eloquent Models: Implementaciones concretas de entidades
+Repositorios: EloquentModelRepository, EloquentSectorRepository, etc.
+Integraciones: Spatie Permission, YouTube API, PDF.js
+Caching y almacenamiento
+Modelo de Dominio
+Entidades Principales
+Model / Technology
+
+Campos: id, title, slug, short_description, long_description_public, long_description_private
+sector_id, trl_level (VO), availability_flags (JSON), status, is_kit/kind
+Relaciones: belongsTo Sector, belongsToMany Tag, TechnologyType, DatasetType, Resource
+Sector
+
+Campos: name, slug, color_code (VO)
+Relación: hasMany Models
+Tag
+
+Campos: name, slug, category (sector, tecnologia, dato, uso, publico)
+Relación: belongsToMany Models
+TechnologyType
+
+Tipos: vision_computacional, deep_learning, asistente_conversacional, reconocimiento_voz, nlp, blockchain
+Relación: belongsToMany Models
+DatasetType
+
+Tipos: imagen, texto, audio, datos_sensor_iot, datos_estructurados
+Relación: belongsToMany Models
+Resource
+
+Campos: type, provider, url/path, requires_auth, meta (JSON)
+Relación: belongsToMany Models
+ModelMetric / Views
+
+Métricas: views_total, views_last_30d, demo_clicks, video_clicks
+Tablas log: model_views, resource_views
+Value Objects
+TRLLevel (int 1-9, validado)
+AvailabilityOption (enum: demo-online, video, docs, api-access, vr-demo)
+ColorCode (valida HEX)
+Slug (validación y normalización)
+DTOs
+ModelCardDTO - Para tarjetas del catálogo
+ModelDetailDTO - Para página de detalle
+ResourceEmbedDTO - Para embeds de recursos
+FilterStateDTO - Estado de filtros activos
+Sistema de Filtros con Orchestrator
+FilterOrchestrator
+Recibe query base y FilterStateDTO
+Ejecuta Strategies en orden predefinido:
+SectorFilterStrategy
+TechnologyTypeFilterStrategy
+DatasetTypeFilterStrategy
+AvailabilityFilterStrategy
+TRLFilterStrategy
+ProspectivaFilterStrategy (futuro)
+TagFilterStrategy
+FullTextSearchStrategy
+ModelSearchService
+Construye FilterStateDTO desde request
+Obtiene query base desde repositorio
+Invoca FilterOrchestrator
+Aplica paginación, ordenamiento, caching
+Retorna ModelCardDTO[]
+Autenticación y Autorización
+AuthorizationService (Fachada sobre Spatie)
+Métodos de dominio:
+canViewRestrictedResources(User $user): bool
+canManageCatalog(User $user): bool
+canViewModel(User $user, Model $model): bool
+Roles
+Guest: Catálogo público, detalle público, recursos públicos
+Visitante Logueado: Contenido restringido (manuales, memorias, TRL eval, forms)
+CDT Admin: CRUD completo, gestión de usuarios
+Policies
+ModelPolicy@viewRestricted, @update, @delete
+ResourcePolicy@view
+Usan AuthorizationService internamente
+Recursos Embebidos
+ResourceEmbedService
+Determina visibilidad según AuthorizationService
+Strategies por provider:
+YouTubeEmbedStrategy
+PDFJSEmbedStrategy
+InternalDemoEmbedStrategy
+Retorna ResourceEmbedDTO
+RestrictedResourceDecorator
+Si requiere auth y usuario no logueado: blur + CTA login
+Si autorizado: delega al embed real
+Métricas y Analytics
+Eventos
+ModelViewedEvent - Al cargar detalle
+ResourceViewedEvent - Al hacer click en recurso
+Listeners
+RegisterModelView - Inserta en model_views, actualiza agregados
+RegisterResourceView - Inserta en resource_views
+Uso
+ModelHighlightService para "más vistos", "más explorados por sector"
+Reportes internos exportables
+Módulos Funcionales
+1. Landing Page / Home
+Hero con carrousel de proyectos destacados
+Buscador global
+Atajos por sector
+Sección "Cómo usar la biblioteca"
+Sección "Sobre el CDT"
+2. Catálogo / Biblioteca Digital
+Vista grid/lista con tarjetas
+Filtros avanzados (sector, tipo IA, tipo datos, disponibilidad, tags, TRL)
+Vista detalle con secciones públicas y protegidas
+3. Recursos Embebidos
+Videos (YouTube embed)
+PDFs (PDF.js)
+Demos web (iframes)
+Modo "teaser blur" para recursos restringidos
+4. Onboarding & Gamificación
+Tour interactivo (Alpine.js) en primera visita
+Badges por exploración (Explorador Agro, Multisector, etc.)
+Métricas por usuario (sectores explorados, modelos vistos)
+Archivos Clave a Crear
+Capa de Dominio
+app/Domain/Models/Model.php (entidad)
+app/Domain/Models/Sector.php
+app/Domain/Models/Tag.php
+app/Domain/Models/TechnologyType.php
+app/Domain/Models/DatasetType.php
+app/Domain/Models/Resource.php
+app/Domain/ValueObjects/TRLLevel.php
+app/Domain/ValueObjects/AvailabilityOption.php
+app/Domain/ValueObjects/ColorCode.php
+app/Domain/DTOs/ModelCardDTO.php
+app/Domain/DTOs/ModelDetailDTO.php
+app/Domain/DTOs/ResourceEmbedDTO.php
+app/Domain/DTOs/FilterStateDTO.php
+app/Domain/Interfaces/ModelSearchRepositoryInterface.php
+app/Domain/Interfaces/FilterStrategyInterface.php
+Capa de Aplicación
+app/Services/ModelSearchService.php
+app/Services/ModelHighlightService.php
+app/Services/ResourceEmbedService.php
+app/Services/AnalyticsService.php
+app/Services/GamificationService.php
+app/Services/AuthorizationService.php
+app/Services/FilterOrchestrator.php
+app/Services/Strategies/SectorFilterStrategy.php
+app/Services/Strategies/TechnologyTypeFilterStrategy.php
+app/Services/Strategies/DatasetTypeFilterStrategy.php
+app/Services/Strategies/AvailabilityFilterStrategy.php
+app/Services/Strategies/TRLFilterStrategy.php
+app/Services/Strategies/TagFilterStrategy.php
+app/Services/Strategies/FullTextSearchStrategy.php
+app/Services/EmbedStrategies/YouTubeEmbedStrategy.php
+app/Services/EmbedStrategies/PDFJSEmbedStrategy.php
+app/Services/EmbedStrategies/InternalDemoEmbedStrategy.php
+app/Services/Decorators/RestrictedResourceDecorator.php
+Capa de Infraestructura
+app/Infrastructure/Eloquent/Models/EloquentModel.php
+app/Infrastructure/Eloquent/Models/EloquentSector.php
+app/Infrastructure/Eloquent/Models/EloquentTag.php
+app/Infrastructure/Eloquent/Models/EloquentTechnologyType.php
+app/Infrastructure/Eloquent/Models/EloquentDatasetType.php
+app/Infrastructure/Eloquent/Models/EloquentResource.php
+app/Infrastructure/Repositories/EloquentModelRepository.php
+app/Infrastructure/Repositories/EloquentSectorRepository.php
+Capa de Presentación
+app/Http/Controllers/HomeController.php
+app/Http/Controllers/CatalogController.php
+app/Http/Controllers/ModelDetailController.php
+app/Http/Controllers/AuthController.php
+app/Policies/ModelPolicy.php
+app/Policies/ResourcePolicy.php
+app/Events/ModelViewedEvent.php
+app/Events/ResourceViewedEvent.php
+app/Listeners/RegisterModelView.php
+app/Listeners/RegisterResourceView.php
+Migraciones
+database/migrations/xxxx_create_sectors_table.php
+database/migrations/xxxx_create_models_table.php
+database/migrations/xxxx_create_tags_table.php
+database/migrations/xxxx_create_technology_types_table.php
+database/migrations/xxxx_create_dataset_types_table.php
+database/migrations/xxxx_create_resources_table.php
+database/migrations/xxxx_create_model_tag_table.php
+database/migrations/xxxx_create_model_technology_type_table.php
+database/migrations/xxxx_create_model_dataset_type_table.php
+database/migrations/xxxx_create_model_resource_table.php
+database/migrations/xxxx_create_model_metrics_table.php
+database/migrations/xxxx_create_model_views_table.php
+database/migrations/xxxx_create_resource_views_table.php
+Vistas
+resources/views/layouts/app.blade.php
+resources/views/home/index.blade.php
+resources/views/catalog/index.blade.php
+resources/views/catalog/show.blade.php
+resources/views/components/model-card.blade.php
+resources/views/components/filter-sidebar.blade.php
+resources/views/components/resource-embed.blade.php
+Seeders
+database/seeders/SectorSeeder.php
+database/seeders/TechnologyTypeSeeder.php
+database/seeders/DatasetTypeSeeder.php
+database/seeders/RoleSeeder.php
+database/seeders/PermissionSeeder.php
+database/seeders/ModelSeeder.php (opcional, para desarrollo)
+Fases de Implementación
+Fase 1: Estructura Base y Dominio
+Crear estructura de carpetas por capas
+Definir Value Objects (TRLLevel, AvailabilityOption, ColorCode)
+Crear DTOs base
+Definir interfaces de repositorios
+Crear migraciones de base de datos
+Fase 2: Infraestructura
+Implementar modelos Eloquent
+Implementar repositorios concretos
+Configurar Spatie Permission
+Crear AuthorizationService
+Fase 3: Sistema de Filtros
+Crear FilterStrategyInterface
+Implementar todas las Strategies
+Crear FilterOrchestrator
+Implementar ModelSearchService
+Fase 4: Servicios de Aplicación
+ModelHighlightService
+ResourceEmbedService con Strategies
+RestrictedResourceDecorator
+AnalyticsService y eventos/listeners
+Fase 5: Controladores y Rutas
+HomeController con carrousel
+CatalogController con filtros
+ModelDetailController
+Configurar rutas y middleware
+Fase 6: Vistas y Frontend
+Layout principal con Alpine.js
+Landing page
+Catálogo con filtros
+Vista detalle con secciones protegidas
+Componentes reutilizables
+Fase 7: Onboarding y Gamificación
+Tour interactivo (Alpine.js)
+Sistema de badges
+Métricas por usuario
+Página de perfil (futuro)
+Fase 8: Importación de Datos
+Comando para importar desde Excel
+Mapeo de datos a entidades
+Generación automática de tags
