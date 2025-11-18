@@ -55,6 +55,26 @@ graph LR
     EV -->|Registra Actividad| AN
     SV -->|Embeds / Descargas| RS
 
+    style U fill:#ff6b6b,color:#000000,stroke:#000000,stroke-width:2px
+    style F fill:#4ecdc4,color:#000000,stroke:#000000,stroke-width:2px
+    style HC fill:#45b7aa,color:#000000,stroke:#000000,stroke-width:2px
+    style SV fill:#95e1d3,color:#000000,stroke:#000000,stroke-width:2px
+    style EV fill:#a8e6cf,color:#000000,stroke:#000000,stroke-width:2px
+    style DM fill:#ffd93d,color:#000000,stroke:#000000,stroke-width:2px
+    style INF fill:#f38181,color:#000000,stroke:#000000,stroke-width:2px
+    style RS fill:#6c5ce7,color:#ffffff,stroke:#000000,stroke-width:2px
+    style AN fill:#a29bfe,color:#000000,stroke:#000000,stroke-width:2px
+    style DB fill:#55efc4,color:#000000,stroke:#000000,stroke-width:2px
+
+    style Cliente fill:#ffeaa7,color:#000000,stroke:#000000,stroke-width:3px
+    style Presentación fill:#74b9ff,color:#000000,stroke:#000000,stroke-width:3px
+    style Aplicación fill:#55efc4,color:#000000,stroke:#000000,stroke-width:3px
+    style Dominio fill:#fab1a0,color:#000000,stroke:#000000,stroke-width:3px
+    style Infraestructura fill:#dfe6e9,color:#000000,stroke:#000000,stroke-width:3px
+
+    style subgraph fill:none,stroke:#666666,stroke-width:2px,color:#333333
+
+    
 Puntos clave:
 
 - **Dominio fuerte**: DTOs y Value Objects encapsulan TRL, slugs, colores y opciones de disponibilidad; evita fugas de tipos primitivos.
