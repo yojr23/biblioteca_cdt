@@ -26,24 +26,24 @@ graph LR
     end
 
     subgraph Presentación
-        F[Front Temporal<br>Tailwind + Vite]
+        F[Front Temporal Tailwind + Vite]
     end
 
     subgraph Aplicación
-        HC[HTTP Controllers<br>(Capa de Entrada)]
-        SV[Servicios de Dominio<br>(Use Cases)]
+        HC[HTTP Controllers Capa de Entrada]
+        SV[Servicios de Dominio Use Cases]
         EV[Eventos & Listeners]
     end
 
     subgraph Dominio
-        DM[(Domain Layer<br>Entidades / VO / Reglas)]
+        DM[Domain Layer Entidades / VO / Reglas]
     end
 
     subgraph Infraestructura
-        INF[(Infrastructure<br>Eloquent Repositories)]
-        RS[Recursos Externos<br>(YouTube, Drive, Storage)]
+        INF[Infrastructure Eloquent Repositories]
+        RS[Recursos Externos YouTube, Drive, Storage]
         AN[AnalyticsService]
-        DB[(Base de Datos<br>PostgreSQL / MySQL)]
+        DB[Base de Datos PostgreSQL / MySQL]
     end
 
     U -->|Navegador| F
