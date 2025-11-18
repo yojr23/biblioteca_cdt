@@ -72,8 +72,6 @@ graph LR
     style Aplicación fill:#55efc4,color:#000000,stroke:#000000,stroke-width:3px
     style Dominio fill:#fab1a0,color:#000000,stroke:#000000,stroke-width:3px
     style Infraestructura fill:#dfe6e9,color:#000000,stroke:#000000,stroke-width:3px
-
-    style subgraph fill:none,stroke:#666666,stroke-width:2px,color:#333333
 ```
 
 Puntos clave:
