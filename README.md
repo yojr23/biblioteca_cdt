@@ -19,6 +19,7 @@ Aplicación Laravel 12 que centraliza modelos, kits y recursos digitales del Cen
 
 El backend está organizado en capas explícitas (Domain, Services, Infrastructure, HTTP) siguiendo principios de arquitectura limpia. El flujo completo puede verse en el siguiente diagrama:
 
+```mermaid
 graph LR
     subgraph Cliente
         U[Usuario Web]
@@ -73,8 +74,8 @@ graph LR
     style Infraestructura fill:#dfe6e9,color:#000000,stroke:#000000,stroke-width:3px
 
     style subgraph fill:none,stroke:#666666,stroke-width:2px,color:#333333
+```
 
-    
 Puntos clave:
 
 - **Dominio fuerte**: DTOs y Value Objects encapsulan TRL, slugs, colores y opciones de disponibilidad; evita fugas de tipos primitivos.
