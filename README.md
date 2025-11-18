@@ -19,18 +19,41 @@ Aplicación Laravel 12 que centraliza modelos, kits y recursos digitales del Cen
 
 El backend está organizado en capas explícitas (Domain, Services, Infrastructure, HTTP) siguiendo principios de arquitectura limpia. El flujo completo puede verse en el siguiente diagrama:
 
-```medusa
 graph LR
-    U[Usuario web] -->|Navegador| F[Front temporal Tailwind/Vite]
-    F -->|HTTP| HC[HTTP Controllers]
-    HC -->|Coordina| SV[Servicios de dominio]
-    SV -->|DTO/VO| DM[(Domain Layer)]
-    SV -->|Repos/Queries| INF[(Infrastructure Eloquent)]
-    INF -->|ORM| DB[(PostgreSQL/MySQL)]
-    SV -->|Eventos| EV[Events & Listeners]
-    EV -->|Registra| AN[AnalyticsService]
-    SV -->|Embeds| RS[Recursos externos (YouTube, Drive, Storage)]
-```
+    subgraph Cliente
+        U[Usuario Web]
+    end
+
+    subgraph Presentación
+        F[Front Temporal<br>Tailwind + Vite]
+    end
+
+    subgraph Aplicación
+        HC[HTTP Controllers<br>(Capa de Entrada)]
+        SV[Servicios de Dominio<br>(Use Cases)]
+        EV[Eventos & Listeners]
+    end
+
+    subgraph Dominio
+        DM[(Domain Layer<br>Entidades / VO / Reglas)]
+    end
+
+    subgraph Infraestructura
+        INF[(Infrastructure<br>Eloquent Repositories)]
+        RS[Recursos Externos<br>(YouTube, Drive, Storage)]
+        AN[AnalyticsService]
+        DB[(Base de Datos<br>PostgreSQL / MySQL)]
+    end
+
+    U -->|Navegador| F
+    F -->|HTTP| HC
+    HC -->|Coordina Casos de Uso| SV
+    SV -->|Usa Entidades / VO| DM
+    SV -->|Repos / Queries| INF
+    INF -->|ORM| DB
+    SV -->|Eventos de Dominio| EV
+    EV -->|Registra Actividad| AN
+    SV -->|Embeds / Descargas| RS
 
 Puntos clave:
 
