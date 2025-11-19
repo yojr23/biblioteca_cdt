@@ -157,6 +157,16 @@ graph TD
     Model --> Metric
     Model --> ModelView
     Resource --> ResourceView
+
+    style Sector fill:#ff6b6b,color:#000000,stroke:#000000,stroke-width:2px
+    style Model fill:#4ecdc4,color:#000000,stroke:#000000,stroke-width:2px
+    style Tag fill:#95e1d3,color:#000000,stroke:#000000,stroke-width:2px
+    style TechnologyType fill:#a8e6cf,color:#000000,stroke:#000000,stroke-width:2px
+    style DatasetType fill:#ffd93d,color:#000000,stroke:#000000,stroke-width:2px
+    style Resource fill:#f38181,color:#000000,stroke:#000000,stroke-width:2px
+    style Metric fill:#6c5ce7,color:#ffffff,stroke:#000000,stroke-width:2px
+    style ModelView fill:#a29bfe,color:#000000,stroke:#000000,stroke-width:2px
+    style ResourceView fill:#55efc4,color:#000000,stroke:#000000,stroke-width:2px
 ```
 
 ## Principios SOLID, POO y tratamiento de problemas
