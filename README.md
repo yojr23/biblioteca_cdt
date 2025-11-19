@@ -147,7 +147,7 @@ Relaciones principales:
 - `resources` pueden requerir autenticación y guardan proveedor/URL/archivo.
 - `model_metrics`, `model_views` y `resource_views` almacenan estadísticas.
 
-```mermeid
+```mermaid
 graph TD
     Sector <--1:N--> Model
     Model <--M:M--> Tag
